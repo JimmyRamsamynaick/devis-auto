@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 
 async function main() {
   const password = await bcrypt.hash('admin123', 10)
+  const jimmyPassword = await bcrypt.hash('Pokemon15082005.', 10)
   
   // Create Admin User
   const user = await prisma.user.upsert({
@@ -16,8 +17,21 @@ async function main() {
       password,
     },
   })
+
+  // Create Jimmy User
+  const jimmy = await prisma.user.upsert({
+    where: { email: 'jimmyramsamynaick@gmail.com' },
+    update: {
+      password: jimmyPassword,
+    },
+    create: {
+      email: 'jimmyramsamynaick@gmail.com',
+      name: 'Jimmy Ramsamynaick',
+      password: jimmyPassword,
+    },
+  })
   
-  console.log({ user })
+  console.log({ user, jimmy })
 
   // Create Services
   const services = [

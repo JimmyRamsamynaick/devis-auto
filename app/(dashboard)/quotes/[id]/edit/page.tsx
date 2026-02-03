@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2, Plus, Trash2 } from 'lucide-react'
@@ -34,19 +34,20 @@ type QuoteFormValues = {
   taxRate: number
 }
 
-export default function NewQuotePage() {
+export default function EditQuotePage(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const router = useRouter()
   const [clients, setClients] = useState<Client[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
-  const { register, control, handleSubmit, watch, setValue, formState: { errors } } = useForm<QuoteFormValues>({
+  const { register, control, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<QuoteFormValues>({
     defaultValues: {
-      validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +30 days
+      validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       items: [{ description: '', quantity: 1, unitPrice: 0 }],
       discount: 0,
-      taxRate: 20, // 20% default VAT
+      taxRate: 20,
     }
   })
 
@@ -62,13 +63,31 @@ export default function NewQuotePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [clientsRes, servicesRes] = await Promise.all([
+        const [clientsRes, servicesRes, quoteRes] = await Promise.all([
           fetch('/api/clients'),
-          fetch('/api/services')
+          fetch('/api/services'),
+          fetch(`/api/quotes/${params.id}`)
         ])
         
         if (clientsRes.ok) setClients(await clientsRes.json())
         if (servicesRes.ok) setServices(await servicesRes.json())
+        
+        if (quoteRes.ok) {
+          const quote = await quoteRes.json()
+          reset({
+            clientId: quote.clientId,
+            validUntil: new Date(quote.validUntil).toISOString().split('T')[0],
+            items: quote.items.map((item: any) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unitPrice: item.unitPrice
+            })),
+            discount: quote.discount,
+            taxRate: quote.taxRate
+          })
+        } else {
+          router.push('/quotes')
+        }
       } catch (error) {
         console.error(error)
       } finally {
@@ -76,7 +95,7 @@ export default function NewQuotePage() {
       }
     }
     fetchData()
-  }, [])
+  }, [params.id, reset, router])
 
   const calculateTotals = () => {
     const subtotal = watchItems.reduce((acc, item) => acc + (item.quantity * item.unitPrice), 0)
@@ -103,17 +122,17 @@ export default function NewQuotePage() {
   const onSubmit = async (data: QuoteFormValues) => {
     setSubmitting(true)
     try {
-      const res = await fetch('/api/quotes', {
-        method: 'POST',
+      const res = await fetch(`/api/quotes/${params.id}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
 
       if (res.ok) {
-        router.push('/quotes')
+        router.push(`/quotes/${params.id}`)
         router.refresh()
       } else {
-        alert('Erreur lors de la création du devis')
+        alert('Erreur lors de la modification du devis')
       }
     } catch (error) {
       console.error(error)
@@ -134,10 +153,10 @@ export default function NewQuotePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/quotes" className="text-gray-500 hover:text-gray-700">
+        <Link href={`/quotes/${params.id}`} className="text-gray-500 hover:text-gray-700">
           <ArrowLeft size={24} />
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau Devis</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Modifier le Devis</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -300,7 +319,7 @@ export default function NewQuotePage() {
 
         <div className="flex justify-end gap-4">
           <Link
-            href="/quotes"
+            href={`/quotes/${params.id}`}
             className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
           >
             Annuler
@@ -311,7 +330,7 @@ export default function NewQuotePage() {
             className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
           >
             {submitting ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
-            Créer le devis
+            Enregistrer les modifications
           </button>
         </div>
       </form>

@@ -1,14 +1,13 @@
 import { prisma } from "../../../../lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Download } from "lucide-react"
-import { InvoiceActions } from "../../../../components/invoices/InvoiceActions"
+import { ArrowLeft, Download, Edit } from "lucide-react"
 
-export default async function InvoiceDetailsPage(
+export default async function QuoteDetailsPage(
   props: { params: Promise<{ id: string }> }
 ) {
   const params = await props.params;
-  const invoice = await prisma.invoice.findUnique({
+  const quote = await prisma.quote.findUnique({
     where: { id: params.id },
     include: {
       client: true,
@@ -16,7 +15,7 @@ export default async function InvoiceDetailsPage(
     }
   })
 
-  if (!invoice) {
+  if (!quote) {
     notFound()
   }
 
@@ -24,21 +23,33 @@ export default async function InvoiceDetailsPage(
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/invoices" className="text-gray-500 hover:text-gray-700">
+          <Link href="/quotes" className="text-gray-500 hover:text-gray-700">
             <ArrowLeft size={24} />
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Facture {invoice.number}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Devis {quote.number}</h1>
           <span className={`px-2 py-1 text-xs font-semibold rounded-full 
-            ${invoice.status === 'PAID' ? 'bg-green-100 text-green-800' : 
-              invoice.status === 'OVERDUE' ? 'bg-red-100 text-red-800' : 
-              'bg-blue-100 text-blue-800'}`}>
-            {invoice.status}
+            ${quote.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' : 
+              quote.status === 'SENT' ? 'bg-blue-100 text-blue-800' : 
+              quote.status === 'REJECTED' ? 'bg-red-100 text-red-800' : 
+              'bg-gray-100 text-gray-800'}`}>
+            {quote.status === 'DRAFT' ? 'Brouillon' :
+             quote.status === 'SENT' ? 'Envoyé' :
+             quote.status === 'ACCEPTED' ? 'Accepté' :
+             quote.status === 'REJECTED' ? 'Refusé' : quote.status}
           </span>
         </div>
         <div className="flex gap-2">
-          <InvoiceActions invoiceId={invoice.id} status={invoice.status} />
+          {quote.status === 'DRAFT' && (
+            <Link
+              href={`/quotes/${quote.id}/edit`}
+              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 flex items-center gap-2"
+            >
+              <Edit size={20} />
+              Modifier
+            </Link>
+          )}
           <a
-            href={`/api/invoices/${invoice.id}/pdf`}
+            href={`/api/quotes/${quote.id}/pdf`}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
@@ -58,27 +69,27 @@ export default async function InvoiceDetailsPage(
             <div className="text-gray-600">jimmyramsamynaick@gmail.com</div>
           </div>
           <div className="text-right">
-            <div className="text-sm text-gray-500 mb-1">FACTURE N°</div>
-            <div className="text-xl font-bold text-gray-900 mb-4">{invoice.number}</div>
+            <div className="text-sm text-gray-500 mb-1">DEVIS N°</div>
+            <div className="text-xl font-bold text-gray-900 mb-4">{quote.number}</div>
             
             <div className="text-sm text-gray-500 mb-1">Date d&apos;émission</div>
-            <div className="font-medium mb-2">{new Date(invoice.createdAt).toLocaleDateString('fr-FR')}</div>
+            <div className="font-medium mb-2">{new Date(quote.createdAt).toLocaleDateString('fr-FR')}</div>
             
-            <div className="text-sm text-gray-500 mb-1">Date d&apos;échéance</div>
-            <div className="font-medium">{new Date(invoice.dueDate).toLocaleDateString('fr-FR')}</div>
+            <div className="text-sm text-gray-500 mb-1">Valide jusqu&apos;au</div>
+            <div className="font-medium">{new Date(quote.validUntil).toLocaleDateString('fr-FR')}</div>
           </div>
         </div>
 
         {/* Client */}
         <div className="bg-gray-50 p-6 rounded-lg mb-12">
-          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Facturé à</h3>
-          <div className="text-gray-900 font-bold text-lg mb-1">{invoice.client.name}</div>
-          {invoice.client.companyName && (
-            <div className="text-gray-900 mb-1">{invoice.client.companyName}</div>
+          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Pour</h3>
+          <div className="text-gray-900 font-bold text-lg mb-1">{quote.client.name}</div>
+          {quote.client.companyName && (
+            <div className="text-gray-900 mb-1">{quote.client.companyName}</div>
           )}
-          <div className="text-gray-600">{invoice.client.address}</div>
-          <div className="text-gray-600">{invoice.client.email}</div>
-          <div className="text-gray-600">{invoice.client.phone}</div>
+          <div className="text-gray-600">{quote.client.address}</div>
+          <div className="text-gray-600">{quote.client.email}</div>
+          <div className="text-gray-600">{quote.client.phone}</div>
         </div>
 
         {/* Items */}
@@ -92,7 +103,7 @@ export default async function InvoiceDetailsPage(
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {invoice.items.map((item: { description: string; quantity: number; unitPrice: number }, idx: number) => (
+            {quote.items.map((item: { description: string; quantity: number; unitPrice: number }, idx: number) => (
               <tr key={idx}>
                 <td className="px-3 py-4 text-sm text-gray-900">{item.description}</td>
                 <td className="px-3 py-4 text-sm text-gray-900 text-center">{item.quantity}</td>
@@ -110,21 +121,21 @@ export default async function InvoiceDetailsPage(
           <div className="w-64 space-y-3">
             <div className="flex justify-between text-sm text-gray-600">
               <span>Sous-total HT</span>
-              <span>{invoice.subtotal.toFixed(2)} €</span>
+              <span>{quote.subtotal.toFixed(2)} €</span>
             </div>
-            {invoice.discount > 0 && (
+            {quote.discount > 0 && (
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Remise</span>
-                <span>-{invoice.discount.toFixed(2)} €</span>
+                <span>-{quote.discount.toFixed(2)} €</span>
               </div>
             )}
             <div className="flex justify-between text-sm text-gray-600">
-              <span>TVA ({invoice.taxRate}%)</span>
-              <span>{invoice.taxAmount.toFixed(2)} €</span>
+              <span>TVA ({quote.taxRate}%)</span>
+              <span>{quote.taxAmount.toFixed(2)} €</span>
             </div>
             <div className="pt-3 border-t border-gray-200 flex justify-between text-lg font-bold text-gray-900">
               <span>Total TTC</span>
-              <span>{invoice.total.toFixed(2)} €</span>
+              <span>{quote.total.toFixed(2)} €</span>
             </div>
           </div>
         </div>

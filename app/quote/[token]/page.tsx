@@ -38,10 +38,9 @@ export default async function PublicQuotePage(
           <div className="flex flex-col md:flex-row justify-between mb-12 gap-8">
             <div>
               <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">De</h3>
-              <div className="text-gray-900 font-medium">Auto Devis</div>
-              <div className="text-gray-600">123 Rue de l&apos;Innovation</div>
-              <div className="text-gray-600">75001 Paris, France</div>
-              <div className="text-gray-600">contact@autodevis.com</div>
+              <div className="text-gray-900 font-medium">JimmyTech</div>
+              <div className="text-gray-600">Auterive 31190 France</div>
+              <div className="text-gray-600">jimmyramsamynaick@gmail.com</div>
             </div>
             <div className="md:text-right">
               <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Pour</h3>
