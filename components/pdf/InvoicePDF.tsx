@@ -202,7 +202,7 @@ export default function InvoicePDF({ invoice }: InvoicePDFProps) {
 
         <View style={styles.footer} fixed>
           <Text>Merci de votre confiance.</Text>
-          <Text>Paiement par virement bancaire : IBAN FR76 1234 5678 9012 3456 7890 123</Text>
+          <Text>Paiement par virement bancaire : IBAN FR76 2823 3000 0194 7896 0817 025</Text>
           <Text>En cas de retard de paiement, une pénalité de 3 fois le taux d'intérêt légal sera appliquée.</Text>
           <Text>Indemnité forfaitaire pour frais de recouvrement : 40 €.</Text>
         </View>
