@@ -1,4 +1,4 @@
-import Sidebar from "../../components/Sidebar"
+import DashboardLayoutClient from "./DashboardLayoutClient"
 
 export default function DashboardLayout({
   children,
@@ -6,11 +6,8 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Sidebar />
-      <main className="ml-64 p-8">
-        {children}
-      </main>
-    </div>
+    <DashboardLayoutClient>
+      {children}
+    </DashboardLayoutClient>
   )
 }

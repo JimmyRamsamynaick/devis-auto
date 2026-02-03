@@ -89,6 +89,7 @@ export default async function QuotesPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

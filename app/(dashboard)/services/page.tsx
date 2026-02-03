@@ -60,6 +60,7 @@ export default async function ServicesPage() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

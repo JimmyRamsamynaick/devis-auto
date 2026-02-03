@@ -45,7 +45,7 @@ export default async function ClientsPage() {
             clients.map((client: Client) => (
               <li key={client.id} className="hover:bg-gray-50 transition-colors">
                 <div className="px-6 py-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
                         {client.name.charAt(0).toUpperCase()}
@@ -60,7 +60,7 @@ export default async function ClientsPage() {
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-1">
+                    <div className="flex flex-col items-start sm:items-end gap-1 pl-14 sm:pl-0">
                       <div className="flex items-center gap-2 mb-2">
                         <ClientRowActions clientId={client.id} />
                       </div>
