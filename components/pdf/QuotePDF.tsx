@@ -123,6 +123,10 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     fontSize: 10,
   },
+  signatureSection: {
+    marginTop: 40,
+    marginLeft: 30,
+  },
 });
 
 interface QuotePDFProps {
@@ -201,6 +205,11 @@ export default function QuotePDF({ quote }: QuotePDFProps) {
             <Text style={styles.grandTotal}>Total TTC:</Text>
             <Text style={styles.grandTotal}>{quote.total.toFixed(2)} €</Text>
           </View>
+        </View>
+
+        <View style={styles.signatureSection} wrap={false}>
+          <Text style={{ marginBottom: 15 }}>Bon pour accord le : ____________________</Text>
+          <Text>Signature précédée de la mention "Bon pour accord" :</Text>
         </View>
 
         <View style={styles.footer} wrap={false}>
