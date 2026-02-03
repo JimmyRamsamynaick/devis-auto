@@ -4,7 +4,7 @@ import { authOptions } from "../../../../../lib/auth"
 import { NextResponse } from "next/server"
 import { sendEmail } from "../../../../../lib/email"
 import { renderToStream } from "@react-pdf/renderer"
-import { InvoicePDF } from "../../../../../components/pdf/InvoicePDF"
+import InvoicePDF from "../../../../../components/pdf/InvoicePDF"
 
 export async function POST(
   req: Request,

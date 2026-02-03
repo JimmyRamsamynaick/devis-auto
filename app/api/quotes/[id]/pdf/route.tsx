@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../../../../../lib/auth"
 import { NextResponse } from "next/server"
 import { renderToStream } from "@react-pdf/renderer"
-import { QuotePDF } from "../../../../../components/pdf/QuotePDF"
+import QuotePDF from "../../../../../components/pdf/QuotePDF"
 
 export async function GET(
   req: Request,
@@ -42,7 +42,7 @@ export async function GET(
     return new NextResponse(webStream as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="Dev${quote.client.name.replace(/\s+/g, '')}-${new Date().toISOString().split('T')[0]}.pdf"`,
+        'Content-Disposition': `attachment; filename="${quote.client.name.replace(/\s+/g, '')}-${new Date().toISOString().split('T')[0]}-${quote.number}.pdf"`,
       },
     })
   } catch (error) {
