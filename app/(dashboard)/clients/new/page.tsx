@@ -38,11 +38,12 @@ export default function NewClientPage() {
         router.push('/clients')
         router.refresh()
       } else {
-        alert('Erreur lors de la création du client')
+        const errorText = await res.text()
+        alert(`Erreur: ${res.status} - ${errorText}`)
       }
     } catch (error) {
       console.error(error)
-      alert('Une erreur est survenue')
+      alert('Une erreur inattendue est survenue')
     } finally {
       setLoading(false)
     }
