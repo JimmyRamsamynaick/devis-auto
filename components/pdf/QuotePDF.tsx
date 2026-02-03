@@ -203,7 +203,7 @@ export default function QuotePDF({ quote }: QuotePDFProps) {
           </View>
         </View>
 
-        <View style={styles.footer} fixed>
+        <View style={styles.footer} wrap={false}>
           <Text>Merci de votre confiance.</Text>
           <Text>Conditions de paiement : 30 jours fin de mois. Pas d'escompte pour paiement anticipé.</Text>
         </View>

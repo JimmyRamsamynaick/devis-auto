@@ -229,7 +229,7 @@ export default function InvoicePDF({ invoice }: InvoicePDFProps) {
           </View>
         </View>
 
-        <View style={styles.footer} fixed>
+        <View style={styles.footer} wrap={false}>
           <Text>Merci de votre confiance.</Text>
           <Text>Paiement accepté par Virement, PayPal ou Espèces.</Text>
           <Text>IBAN : FR76 2823 3000 0194 7896 0817 025</Text>
