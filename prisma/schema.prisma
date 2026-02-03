@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String    @unique
+  companyName String?
+  address     String?
+  phone       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  quotes      Quote[]
+  invoices    Invoice[]
+}
+
+model Service {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  price       Float
+  duration    Int?     // Duration in minutes
+  category    String   // Maintenance, Installation, Security, Network, Development
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Quote {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  number      String      @unique // e.g., DEV-2024-001
+  createdAt   DateTime    @default(now())
+  validUntil  DateTime
+  status      String      @default("DRAFT") // DRAFT, SENT, ACCEPTED, REJECTED, CONVERTED
+  
+  subtotal    Float
+  taxRate     Float       @default(0) // Percentage, e.g., 20.0
+  taxAmount   Float       @default(0)
+  discount    Float       @default(0)
+  total       Float
+  deposit     Float       @default(0) // Acompte
+
+  token       String      @unique @default(uuid()) // Secure token for public access
+
+  clientId    String      @db.ObjectId
+  client      Client      @relation(fields: [clientId], references: [id])
+  
+  items       QuoteItem[]
+  invoice     Invoice?
+
+  updatedAt   DateTime    @updatedAt
+}
+
+model QuoteItem {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  quoteId     String  @db.ObjectId
+  quote       Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float
+  total       Float
+}
+
+model Invoice {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  number      String        @unique // e.g., FAC-2024-001
+  createdAt   DateTime      @default(now())
+  dueDate     DateTime
+  status      String        @default("UNPAID") // UNPAID, PAID, OVERDUE, CANCELLED
+  
+  subtotal    Float
+  taxRate     Float         @default(0)
+  taxAmount   Float         @default(0)
+  discount    Float         @default(0)
+  total       Float
+  depositPaid Float         @default(0) // Amount already paid (acompte)
+  balanceDue  Float         // Remaining amount
+
+  clientId    String        @db.ObjectId
+  client      Client        @relation(fields: [clientId], references: [id])
+
+  quoteId     String?       @unique @db.ObjectId
+  quote       Quote?        @relation(fields: [quoteId], references: [id])
+
+  items       InvoiceItem[]
+
+  updatedAt   DateTime      @updatedAt
+}
+
+model InvoiceItem {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  invoiceId   String  @db.ObjectId
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float
+  total       Float
+}
