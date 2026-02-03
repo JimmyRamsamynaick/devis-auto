@@ -59,9 +59,10 @@ export default async function ServicesPage() {
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
         </div>
       </div>
     </div>
   )
 }
+
