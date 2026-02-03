@@ -16,18 +16,24 @@ export async function PATCH(
 
   try {
     const body = await req.json()
-    const { status } = body
+    const { name, companyName, email, phone, address } = body
 
-    if (!status) {
-      return new NextResponse("Missing status", { status: 400 })
+    if (!name || !email) {
+      return new NextResponse("Name and Email are required", { status: 400 })
     }
 
-    const invoice = await prisma.invoice.update({
+    const client = await prisma.client.update({
       where: { id: params.id },
-      data: { status }
+      data: {
+        name,
+        companyName,
+        email,
+        phone,
+        address
+      }
     })
 
-    return NextResponse.json(invoice)
+    return NextResponse.json(client)
   } catch (error) {
     console.error(error)
     return new NextResponse("Internal Error", { status: 500 })
@@ -46,13 +52,7 @@ export async function DELETE(
   }
 
   try {
-    // Delete invoice items first (cascade should handle this but explicit is safer if not configured)
-    // Actually prisma schema usually handles cascade delete if relations are set up right.
-    // Assuming cascade delete is enabled in schema or we delete the invoice and items go with it.
-    // If not, we might need a transaction.
-    
-    // We will try to delete the invoice directly.
-    await prisma.invoice.delete({
+    await prisma.client.delete({
       where: { id: params.id }
     })
 

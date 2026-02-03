@@ -2,6 +2,7 @@ import { prisma } from "../../../lib/prisma"
 import Link from "next/link"
 import { Plus, Search, Building, Mail, Phone, MapPin } from "lucide-react"
 import { Client } from "@prisma/client"
+import ClientRowActions from "../../../components/ClientRowActions"
 
 export default async function ClientsPage() {
   const clients = await prisma.client.findMany({
@@ -58,6 +59,9 @@ export default async function ClientsPage() {
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <ClientRowActions clientId={client.id} />
+                      </div>
                       <div className="text-sm text-gray-500 flex items-center gap-1">
                         <Mail size={14} />
                         {client.email}

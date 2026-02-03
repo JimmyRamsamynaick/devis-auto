@@ -25,9 +25,16 @@ export default async function DashboardPage() {
     })
   ])
 
-  // Calculate total revenue from paid invoices
+  // Calculate total revenue from paid invoices (current year only)
+  const currentYear = new Date().getFullYear()
   const paidInvoices = await prisma.invoice.aggregate({
-    where: { status: 'PAID' },
+    where: { 
+      status: 'PAID',
+      createdAt: {
+        gte: new Date(currentYear, 0, 1),
+        lt: new Date(currentYear + 1, 0, 1)
+      }
+    },
     _sum: { total: true }
   })
   

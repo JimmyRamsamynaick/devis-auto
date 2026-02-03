@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Eye, Download, FileText, Loader2, Send } from 'lucide-react'
+import { Eye, Download, FileText, Loader2, Send, Edit, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface QuoteRowActionsProps {
@@ -15,9 +15,11 @@ export default function QuoteRowActions({ quoteId, status, clientEmail }: QuoteR
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [sending, setSending] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const handleConvert = async () => {
     if (!confirm('Voulez-vous convertir ce devis en facture ?')) return
+
 
     setLoading(true)
     try {
@@ -62,6 +64,28 @@ export default function QuoteRowActions({ quoteId, status, clientEmail }: QuoteR
     }
   }
 
+  const handleDelete = async () => {
+    if (!confirm('Voulez-vous vraiment supprimer ce devis ?')) return
+
+    setDeleting(true)
+    try {
+      const res = await fetch(`/api/quotes/${quoteId}`, {
+        method: 'DELETE'
+      })
+
+      if (res.ok) {
+        router.refresh()
+      } else {
+        alert('Erreur lors de la suppression')
+      }
+    } catch (error) {
+      console.error(error)
+      alert('Une erreur est survenue')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   return (
     <div className="flex justify-end gap-2 items-center">
       {status === 'ACCEPTED' && (
@@ -85,6 +109,12 @@ export default function QuoteRowActions({ quoteId, status, clientEmail }: QuoteR
           {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
         </button>
       )}
+
+      {status === 'DRAFT' && (
+        <Link href={`/quotes/${quoteId}/edit`} className="text-gray-600 hover:text-gray-900" title="Modifier">
+          <Edit size={18} />
+        </Link>
+      )}
       
       <Link href={`/quotes/${quoteId}`} className="text-blue-600 hover:text-blue-900" title="Voir">
         <Eye size={18} />
@@ -99,6 +129,15 @@ export default function QuoteRowActions({ quoteId, status, clientEmail }: QuoteR
       >
         <Download size={18} />
       </a>
+
+      <button 
+        onClick={handleDelete} 
+        disabled={deleting}
+        className="text-red-600 hover:text-red-900"
+        title="Supprimer"
+      >
+        {deleting ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
+      </button>
     </div>
   )
 }
