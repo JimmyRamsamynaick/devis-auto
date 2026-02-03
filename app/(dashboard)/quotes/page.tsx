@@ -92,6 +92,7 @@ export default async function QuotesPage() {
         </table>
       </div>
     </div>
+    </div>
   )
 }
 

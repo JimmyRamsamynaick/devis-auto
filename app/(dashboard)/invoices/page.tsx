@@ -91,6 +91,7 @@ export default async function InvoicesPage() {
         </table>
       </div>
     </div>
+    </div>
   )
 }
 
