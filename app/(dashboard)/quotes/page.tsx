@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Plus, Search } from "lucide-react"
 import QuoteRowActions from "../../../components/QuoteRowActions"
 
+export const dynamic = 'force-dynamic'
+
 export default async function QuotesPage() {
   const quotes = await prisma.quote.findMany({
     orderBy: { createdAt: 'desc' },

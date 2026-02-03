@@ -4,6 +4,8 @@ import { Plus, Search, Building, Mail, Phone, MapPin } from "lucide-react"
 import { Client } from "@prisma/client"
 import ClientRowActions from "../../../components/ClientRowActions"
 
+export const dynamic = 'force-dynamic'
+
 export default async function ClientsPage() {
   const clients = await prisma.client.findMany({
     orderBy: { createdAt: 'desc' }

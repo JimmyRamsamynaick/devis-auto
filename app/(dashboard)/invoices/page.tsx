@@ -2,6 +2,8 @@ import { prisma } from "../../../lib/prisma"
 import { Search } from "lucide-react"
 import InvoiceRowActions from "../../../components/InvoiceRowActions"
 
+export const dynamic = 'force-dynamic'
+
 export default async function InvoicesPage() {
   const invoices = await prisma.invoice.findMany({
     orderBy: { createdAt: 'desc' },

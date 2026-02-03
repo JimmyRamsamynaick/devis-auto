@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Plus, Search } from "lucide-react"
 import PurchaseOrderRowActions from "../../../components/PurchaseOrderRowActions"
 
+export const dynamic = 'force-dynamic'
+
 export default async function PurchaseOrdersPage() {
   const purchaseOrders = await prisma.purchaseOrder.findMany({
     orderBy: { createdAt: 'desc' },
