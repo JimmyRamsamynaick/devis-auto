@@ -53,7 +53,7 @@ export default async function DashboardPage() {
             <DollarSign size={24} />
           </div>
           <div>
-            <p className="text-sm text-gray-500 font-medium">Chiffre d&apos;affaires</p>
+            <p className="text-sm text-gray-500 font-medium">Chiffre d&apos;affaires ({currentYear})</p>
             <p className="text-2xl font-bold text-gray-900">{totalRevenue.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</p>
           </div>
         </div>
