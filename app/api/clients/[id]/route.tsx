@@ -54,9 +54,25 @@ export async function DELETE(
   }
 
   try {
-    await prisma.client.delete({
-      where: { id: params.id }
-    })
+    // Delete all related records in a transaction
+    await prisma.$transaction([
+      // Delete invoices first (they might reference quotes)
+      prisma.invoice.deleteMany({
+        where: { clientId: params.id }
+      }),
+      // Delete purchase orders
+      prisma.purchaseOrder.deleteMany({
+        where: { clientId: params.id }
+      }),
+      // Delete quotes
+      prisma.quote.deleteMany({
+        where: { clientId: params.id }
+      }),
+      // Finally delete the client
+      prisma.client.delete({
+        where: { id: params.id }
+      })
+    ])
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
