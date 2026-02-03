@@ -24,6 +24,7 @@ export default function ClientRowActions({ clientId }: ClientRowActionsProps) {
 
       if (res.ok) {
         router.refresh()
+        window.location.reload()
       } else {
         alert('Erreur lors de la suppression')
       }
