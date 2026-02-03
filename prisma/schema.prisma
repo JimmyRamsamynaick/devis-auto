@@ -30,6 +30,7 @@ model Client {
   updatedAt   DateTime  @updatedAt
   quotes      Quote[]
   invoices    Invoice[]
+  purchaseOrders PurchaseOrder[]
 }
 
 model Service {
@@ -114,4 +115,38 @@ model InvoiceItem {
   quantity    Float   @default(1)
   unitPrice   Float
   total       Float
+}
+
+model PurchaseOrder {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  number      String              @unique // e.g., BC-2024-001
+  createdAt   DateTime            @default(now())
+  validUntil  DateTime
+  status      String              @default("DRAFT") // DRAFT, SENT, ACCEPTED, REJECTED
+  
+  subtotal    Float
+  taxRate     Float               @default(0)
+  taxAmount   Float               @default(0)
+  discount    Float               @default(0)
+  total       Float
+  
+  token       String              @unique @default(uuid())
+
+  clientId    String              @db.ObjectId
+  client      Client              @relation(fields: [clientId], references: [id])
+  
+  items       PurchaseOrderItem[]
+
+  updatedAt   DateTime            @updatedAt
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseOrderId String        @db.ObjectId
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  
+  description     String
+  quantity        Float         @default(1)
+  unitPrice       Float
+  total           Float
 }

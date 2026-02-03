@@ -16,6 +16,7 @@ import { signOut } from 'next-auth/react'
 const navItems = [
   { href: '/', label: 'Tableau de bord', icon: LayoutDashboard },
   { href: '/quotes', label: 'Devis', icon: FileText },
+  { href: '/purchase-orders', label: 'Bons de Commande', icon: FileText },
   { href: '/invoices', label: 'Factures', icon: Files },
   { href: '/clients', label: 'Clients', icon: Users },
   { href: '/services', label: 'Prestations', icon: Settings }, // Using Settings icon for services management

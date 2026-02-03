@@ -1,0 +1,147 @@
+import { prisma } from "../../../../lib/prisma"
+import { notFound } from "next/navigation"
+import Link from "next/link"
+import { ArrowLeft, Download, Edit } from "lucide-react"
+
+export default async function PurchaseOrderDetailsPage(
+  props: { params: Promise<{ id: string }> }
+) {
+  const params = await props.params;
+  const purchaseOrder = await prisma.purchaseOrder.findUnique({
+    where: { id: params.id },
+    include: {
+      client: true,
+      items: true
+    }
+  })
+
+  if (!purchaseOrder) {
+    notFound()
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/purchase-orders" className="text-gray-500 hover:text-gray-700">
+            <ArrowLeft size={24} />
+          </Link>
+          <h1 className="text-2xl font-bold text-gray-900">Bon de Commande {purchaseOrder.number}</h1>
+          <span className={`px-2 py-1 text-xs font-semibold rounded-full 
+            ${purchaseOrder.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' : 
+              purchaseOrder.status === 'SENT' ? 'bg-blue-100 text-blue-800' : 
+              purchaseOrder.status === 'REJECTED' ? 'bg-red-100 text-red-800' : 
+              'bg-gray-100 text-gray-800'}`}>
+            {purchaseOrder.status === 'DRAFT' ? 'Brouillon' :
+             purchaseOrder.status === 'SENT' ? 'Envoyé' :
+             purchaseOrder.status === 'ACCEPTED' ? 'Accepté' :
+             purchaseOrder.status === 'REJECTED' ? 'Refusé' : purchaseOrder.status}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          {purchaseOrder.status === 'DRAFT' && (
+            <Link
+              href={`/purchase-orders/${purchaseOrder.id}/edit`}
+              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 flex items-center gap-2"
+            >
+              <Edit size={20} />
+              Modifier
+            </Link>
+          )}
+          <a
+            href={`/api/purchase-orders/${purchaseOrder.id}/pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
+          >
+            <Download size={20} />
+            Télécharger PDF
+          </a>
+        </div>
+      </div>
+
+      <div className="bg-white shadow rounded-lg overflow-hidden p-8">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-12">
+          <div>
+            <h2 className="text-2xl font-bold text-blue-600 mb-2">JimmyTech</h2>
+            <div className="text-gray-600">Auterive 31190 France</div>
+            <div className="text-gray-600">jimmyramsamynaick@gmail.com</div>
+          </div>
+          <div className="text-right">
+            <div className="text-sm text-gray-500 mb-1">BON DE COMMANDE N°</div>
+            <div className="text-xl font-bold text-gray-900 mb-4">{purchaseOrder.number}</div>
+            
+            <div className="text-sm text-gray-500 mb-1">Date d&apos;émission</div>
+            <div className="font-medium mb-2">{new Date(purchaseOrder.createdAt).toLocaleDateString('fr-FR')}</div>
+            
+            <div className="text-sm text-gray-500 mb-1">Valide jusqu&apos;au</div>
+            <div className="font-medium">{new Date(purchaseOrder.validUntil).toLocaleDateString('fr-FR')}</div>
+          </div>
+        </div>
+
+        {/* Client */}
+        <div className="bg-gray-50 p-6 rounded-lg mb-12">
+          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Pour</h3>
+          <div className="text-gray-900 font-bold text-lg mb-1">{purchaseOrder.client.name}</div>
+          {purchaseOrder.client.companyName && (
+            <div className="text-gray-900 mb-1">{purchaseOrder.client.companyName}</div>
+          )}
+          <div className="text-gray-600">{purchaseOrder.client.address}</div>
+          <div className="text-gray-600">{purchaseOrder.client.email}</div>
+          <div className="text-gray-600">{purchaseOrder.client.phone}</div>
+        </div>
+
+        {/* Items */}
+        <table className="min-w-full divide-y divide-gray-200 mb-12">
+          <thead>
+            <tr>
+              <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+              <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Qté</th>
+              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Prix Unitaire</th>
+              <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {purchaseOrder.items.map((item) => (
+              <tr key={item.id}>
+                <td className="px-3 py-4 text-sm text-gray-900">{item.description}</td>
+                <td className="px-3 py-4 text-sm text-gray-900 text-center">{item.quantity}</td>
+                <td className="px-3 py-4 text-sm text-gray-900 text-right">
+                  {item.unitPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                </td>
+                <td className="px-3 py-4 text-sm text-gray-900 text-right font-medium">
+                  {item.total.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Totals */}
+        <div className="flex justify-end">
+          <div className="w-64 space-y-3">
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>Sous-total</span>
+              <span>{purchaseOrder.subtotal.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+            </div>
+            {purchaseOrder.discount > 0 && (
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Remise</span>
+                <span>-{purchaseOrder.discount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>TVA ({purchaseOrder.taxRate}%)</span>
+              <span>{purchaseOrder.taxAmount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+            </div>
+            <div className="flex justify-between text-lg font-bold text-gray-900 pt-3 border-t border-gray-200">
+              <span>Total TTC</span>
+              <span>{purchaseOrder.total.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
