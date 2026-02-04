@@ -154,7 +154,7 @@ export default function QuotePDF({ quote }: QuotePDFProps) {
               <Text style={styles.metaValue}>{new Date(quote.createdAt).toLocaleDateString('fr-FR')}</Text>
             </View>
             <View style={styles.metaRow}>
-              <Text style={styles.metaLabel}>Valide jusqu'au:</Text>
+              <Text style={styles.metaLabel}>Valide jusqu&apos;au:</Text>
               <Text style={styles.metaValue}>{new Date(quote.validUntil).toLocaleDateString('fr-FR')}</Text>
             </View>
           </View>
@@ -208,13 +208,13 @@ export default function QuotePDF({ quote }: QuotePDFProps) {
         </View>
 
         <View style={styles.signatureSection} wrap={false}>
-          <Text style={{ marginBottom: 15 }}>Bon pour accord le : ____________________</Text>
-          <Text>Signature précédée de la mention "Bon pour accord" :</Text>
+          <Text style={{ marginBottom: 15 }}>Bon pour accord, lu et approuvé le : ____________________</Text>
+          <Text>Signature :</Text>
         </View>
 
         <View style={styles.footer} wrap={false}>
           <Text>Merci de votre confiance.</Text>
-          <Text>Conditions de paiement : 30 jours fin de mois. Pas d'escompte pour paiement anticipé.</Text>
+          <Text>Conditions de paiement : 30 jours fin de mois. Pas d&apos;escompte pour paiement anticipé.</Text>
         </View>
 
         <Text 

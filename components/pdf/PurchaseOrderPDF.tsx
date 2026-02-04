@@ -160,7 +160,7 @@ export default function PurchaseOrderPDF({ purchaseOrder }: PurchaseOrderPDFProp
               <Text style={styles.metaValue}>{new Date(purchaseOrder.createdAt).toLocaleDateString('fr-FR')}</Text>
             </View>
             <View style={styles.metaRow}>
-              <Text style={styles.metaLabel}>Valide jusqu'au:</Text>
+              <Text style={styles.metaLabel}>Valide jusqu&apos;au:</Text>
               <Text style={styles.metaValue}>{new Date(purchaseOrder.validUntil).toLocaleDateString('fr-FR')}</Text>
             </View>
           </View>
@@ -189,7 +189,7 @@ export default function PurchaseOrderPDF({ purchaseOrder }: PurchaseOrderPDFProp
         </View>
 
         <View style={styles.signatureSection} wrap={false}>
-          <Text style={{ marginBottom: 15 }}>Bon pour accord le : ____________________</Text>
+          <Text style={{ marginBottom: 15 }}>Bon pour accord, lu et approuvé le : ____________________</Text>
           <Text>Signature :</Text>
         </View>
 

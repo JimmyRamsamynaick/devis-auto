@@ -21,7 +21,7 @@ export default async function QuoteDetailsPage(
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Link href="/quotes" className="text-gray-500 hover:text-gray-700">
             <ArrowLeft size={24} />
@@ -38,50 +38,56 @@ export default async function QuoteDetailsPage(
              quote.status === 'REJECTED' ? 'Refusé' : quote.status}
           </span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           {quote.status === 'DRAFT' && (
             <Link
               href={`/quotes/${quote.id}/edit`}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 flex items-center gap-2"
+              className="flex-1 sm:flex-none justify-center bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 flex items-center gap-2"
             >
               <Edit size={20} />
-              Modifier
+              <span className="sm:inline">Modifier</span>
             </Link>
           )}
           <a
             href={`/api/quotes/${quote.id}/pdf`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
+            className="flex-1 sm:flex-none justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center gap-2"
           >
             <Download size={20} />
-            Télécharger PDF
+            <span className="sm:inline">PDF</span>
           </a>
         </div>
       </div>
 
-      <div className="bg-white shadow rounded-lg overflow-hidden p-8">
+      <div className="bg-white shadow rounded-lg overflow-hidden p-6 sm:p-8">
         {/* Header */}
-        <div className="flex justify-between items-start mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-8 md:mb-12 gap-6">
           <div>
             <h2 className="text-2xl font-bold text-blue-600 mb-2">JimmyTech</h2>
             <div className="text-gray-600">Auterive 31190 France</div>
             <div className="text-gray-600">jimmyramsamynaick@gmail.com</div>
           </div>
-          <div className="text-right">
+          <div className="text-left md:text-right w-full md:w-auto">
             <div className="text-sm text-gray-500 mb-1">DEVIS N°</div>
             <div className="text-xl font-bold text-gray-900 mb-4">{quote.number}</div>
             
-            <div className="text-sm text-gray-500 mb-1">Date d&apos;émission</div>
-            <div className="font-medium mb-2">{new Date(quote.createdAt).toLocaleDateString('fr-FR')}</div>
-            
-            <div className="text-sm text-gray-500 mb-1">Valide jusqu&apos;au</div>
-            <div className="font-medium">{new Date(quote.validUntil).toLocaleDateString('fr-FR')}</div>
+            <div className="grid grid-cols-2 md:block gap-4">
+              <div>
+                <div className="text-sm text-gray-500 mb-1">Date d&apos;émission</div>
+                <div className="font-medium mb-2">{new Date(quote.createdAt).toLocaleDateString('fr-FR')}</div>
+              </div>
+              
+              <div>
+                <div className="text-sm text-gray-500 mb-1">Valide jusqu&apos;au</div>
+                <div className="font-medium">{new Date(quote.validUntil).toLocaleDateString('fr-FR')}</div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Client */}
-        <div className="bg-gray-50 p-6 rounded-lg mb-12">
+        <div className="bg-gray-50 p-6 rounded-lg mb-8 md:mb-12">
           <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Pour</h3>
           <div className="text-gray-900 font-bold text-lg mb-1">{quote.client.name}</div>
           {quote.client.companyName && (
@@ -93,7 +99,9 @@ export default async function QuoteDetailsPage(
         </div>
 
         {/* Items */}
-        <table className="min-w-full divide-y divide-gray-200 mb-12">
+        <div className="overflow-x-auto -mx-6 sm:mx-0 mb-8 md:mb-12">
+          <div className="inline-block min-w-full align-middle px-6 sm:px-0">
+            <table className="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
               <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
@@ -114,11 +122,12 @@ export default async function QuoteDetailsPage(
               </tr>
             ))}
           </tbody>
-        </table>
+          </div>
+        </div>
 
         {/* Totals */}
         <div className="flex justify-end">
-          <div className="w-64 space-y-3">
+          <div className="w-full sm:w-64 space-y-3">
             <div className="flex justify-between text-sm text-gray-600">
               <span>Sous-total HT</span>
               <span>{quote.subtotal.toFixed(2)} €</span>

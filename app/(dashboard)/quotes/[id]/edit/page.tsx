@@ -199,8 +199,8 @@ export default function EditQuotePage(props: { params: Promise<{ id: string }> }
           
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-4 items-start bg-gray-50 p-4 rounded-md">
-                <div className="flex-1 space-y-3">
+              <div key={field.id} className="flex flex-col sm:flex-row gap-4 items-start bg-gray-50 p-4 rounded-md relative">
+                <div className="flex-1 space-y-3 w-full">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <select
@@ -223,8 +223,8 @@ export default function EditQuotePage(props: { params: Promise<{ id: string }> }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                     </div>
-                    <div className="flex gap-3">
-                      <div className="w-24">
+                    <div className="flex flex-wrap sm:flex-nowrap gap-3">
+                      <div className="w-24 flex-1 sm:flex-none">
                         <label className="text-xs text-gray-500">Qté</label>
                         <input
                           type="number"
@@ -234,7 +234,7 @@ export default function EditQuotePage(props: { params: Promise<{ id: string }> }
                           className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                       </div>
-                      <div className="w-32">
+                      <div className="w-32 flex-1 sm:flex-none">
                         <label className="text-xs text-gray-500">Prix Unitaire (€)</label>
                         <input
                           type="number"
@@ -244,7 +244,7 @@ export default function EditQuotePage(props: { params: Promise<{ id: string }> }
                           className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                       </div>
-                      <div className="flex-1 text-right pt-6 font-medium">
+                      <div className="w-full sm:flex-1 text-right pt-2 sm:pt-6 font-medium">
                         {(watchItems[index]?.quantity * watchItems[index]?.unitPrice || 0).toFixed(2)} €
                       </div>
                     </div>
@@ -253,7 +253,7 @@ export default function EditQuotePage(props: { params: Promise<{ id: string }> }
                 <button
                   type="button"
                   onClick={() => remove(index)}
-                  className="text-red-500 hover:text-red-700 mt-8"
+                  className="text-red-500 hover:text-red-700 sm:mt-8 self-end sm:self-auto"
                   disabled={fields.length === 1}
                 >
                   <Trash2 size={20} />
