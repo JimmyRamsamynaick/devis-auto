@@ -237,8 +237,8 @@ export default function PurchaseOrderForm({ initialData, isEditing = false }: Pu
                     />
                   </div>
                   
-                  <div className="flex gap-4">
-                    <div className="w-32">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="w-full sm:w-32">
                       <label className="block text-xs font-medium text-gray-500 mb-1">Quantité</label>
                       <input
                         type="number"
@@ -247,7 +247,7 @@ export default function PurchaseOrderForm({ initialData, isEditing = false }: Pu
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       />
                     </div>
-                    <div className="w-40">
+                    <div className="w-full sm:w-40">
                       <label className="block text-xs font-medium text-gray-500 mb-1">Prix unitaire</label>
                       <div className="relative rounded-md shadow-sm">
                         <input
@@ -261,7 +261,7 @@ export default function PurchaseOrderForm({ initialData, isEditing = false }: Pu
                         </div>
                       </div>
                     </div>
-                    <div className="w-40">
+                    <div className="w-full sm:w-40">
                       <label className="block text-xs font-medium text-gray-500 mb-1">Total</label>
                       <div className="py-2 text-right font-medium text-gray-900">
                         {((watchItems[index]?.quantity || 0) * (watchItems[index]?.unitPrice || 0)).toFixed(2)} €
