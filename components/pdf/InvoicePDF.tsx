@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
@@ -233,7 +234,7 @@ export default function InvoicePDF({ invoice }: InvoicePDFProps) {
           <Text>Merci de votre confiance.</Text>
           <Text>Paiement accepté par Virement, PayPal ou Espèces.</Text>
           <Text>IBAN : FR76 2823 3000 0194 7896 0817 025</Text>
-          <Text>En cas de retard de paiement, une pénalité de 3 fois le taux d'intérêt légal sera appliquée.</Text>
+          <Text>En cas de retard de paiement, une pénalité de 3 fois le taux d&apos;intérêt légal sera appliquée.</Text>
           <Text>Indemnité forfaitaire pour frais de recouvrement : 40 €.</Text>
         </View>
 
@@ -250,9 +251,9 @@ export default function InvoicePDF({ invoice }: InvoicePDFProps) {
         <Text style={styles.cgvTitle}>CONDITIONS GÉNÉRALES DE VENTE ET DE PRESTATIONS</Text>
         
         <View style={styles.cgvSection}>
-          <Text style={styles.cgvSectionTitle}>ARTICLE 1 - CHAMPS D'APPLICATION</Text>
+          <Text style={styles.cgvSectionTitle}>ARTICLE 1 - CHAMPS D&apos;APPLICATION</Text>
           <Text style={styles.cgvText}>
-            Les présentes conditions générales de vente (CGV) s'appliquent, sans restriction ni réserve, à l'ensemble des prestations de services et ventes de marchandises réalisées par le prestataire auprès de clients professionnels ou particuliers. Le fait de passer commande ou d'accepter un devis implique l'adhésion entière et sans réserve du client aux présentes CGV.
+            Les présentes conditions générales de vente (CGV) s&apos;appliquent, sans restriction ni réserve, à l&apos;ensemble des prestations de services et ventes de marchandises réalisées par le prestataire auprès de clients professionnels ou particuliers. Le fait de passer commande ou d&apos;accepter un devis implique l&apos;adhésion entière et sans réserve du client aux présentes CGV.
           </Text>
         </View>
 
@@ -268,38 +269,38 @@ export default function InvoicePDF({ invoice }: InvoicePDFProps) {
         <View style={styles.cgvSection}>
           <Text style={styles.cgvSectionTitle}>ARTICLE 3 - RETARD DE PAIEMENT</Text>
           <Text style={styles.cgvText}>
-            En cas de défaut de paiement total ou partiel des marchandises livrées ou des prestations réalisées au jour de la réception, l'acheteur doit verser une pénalité de retard égale à 3 fois le taux de l'intérêt légal.
-            Le taux de l'intérêt légal retenu est celui en vigueur au jour de la livraison des marchandises.
-            Cette pénalité est calculée sur le montant TTC de la somme restant due, et court à compter de la date d'échéance du prix sans qu'aucune mise en demeure préalable ne soit nécessaire.
-            En sus des indemnités de retard, toute somme, y compris l'acompte, non payée à sa date d'échéance produira de plein droit le paiement d'une indemnité forfaitaire de 40 euros due au titre des frais de recouvrement.
+            En cas de défaut de paiement total ou partiel des marchandises livrées ou des prestations réalisées au jour de la réception, l&apos;acheteur doit verser une pénalité de retard égale à 3 fois le taux de l&apos;intérêt légal.
+            Le taux de l&apos;intérêt légal retenu est celui en vigueur au jour de la livraison des marchandises.
+            Cette pénalité est calculée sur le montant TTC de la somme restant due, et court à compter de la date d&apos;échéance du prix sans qu&apos;aucune mise en demeure préalable ne soit nécessaire.
+            En sus des indemnités de retard, toute somme, y compris l&apos;acompte, non payée à sa date d&apos;échéance produira de plein droit le paiement d&apos;une indemnité forfaitaire de 40 euros due au titre des frais de recouvrement.
           </Text>
         </View>
 
         <View style={styles.cgvSection}>
           <Text style={styles.cgvSectionTitle}>ARTICLE 4 - RÉSERVE DE PROPRIÉTÉ</Text>
           <Text style={styles.cgvText}>
-            Le prestataire conserve la propriété des biens vendus jusqu'au paiement intégral du prix, en principal et en accessoires. À ce titre, si l'acheteur fait l'objet d'un redressement ou d'une liquidation judiciaire, le prestataire se réserve le droit de revendiquer, dans le cadre de la procédure collective, les marchandises vendues et restées impayées.
+            Le prestataire conserve la propriété des biens vendus jusqu&apos;au paiement intégral du prix, en principal et en accessoires. À ce titre, si l&apos;acheteur fait l&apos;objet d&apos;un redressement ou d&apos;une liquidation judiciaire, le prestataire se réserve le droit de revendiquer, dans le cadre de la procédure collective, les marchandises vendues et restées impayées.
           </Text>
         </View>
 
         <View style={styles.cgvSection}>
           <Text style={styles.cgvSectionTitle}>ARTICLE 5 - LIVRAISON ET RÉALISATION</Text>
           <Text style={styles.cgvText}>
-            La livraison est effectuée au lieu indiqué par l'acheteur sur le bon de commande. Le délai de livraison indiqué lors de l'enregistrement de la commande n'est donné qu'à titre indicatif et n'est aucunement garanti. Par voie de conséquence, tout retard raisonnable dans la livraison des produits ne pourra pas donner lieu au profit de l'acheteur à l'allocation de dommages et intérêts ou à l'annulation de la commande.
+            La livraison est effectuée au lieu indiqué par l&apos;acheteur sur le bon de commande. Le délai de livraison indiqué lors de l&apos;enregistrement de la commande n&apos;est donné qu&apos;à titre indicatif et n&apos;est aucunement garanti. Par voie de conséquence, tout retard raisonnable dans la livraison des produits ne pourra pas donner lieu au profit de l&apos;acheteur à l&apos;allocation de dommages et intérêts ou à l&apos;annulation de la commande.
           </Text>
         </View>
 
         <View style={styles.cgvSection}>
           <Text style={styles.cgvSectionTitle}>ARTICLE 6 - FORCE MAJEURE</Text>
           <Text style={styles.cgvText}>
-            La responsabilité du prestataire ne pourra pas être mise en oeuvre si la non-exécution ou le retard dans l'exécution de l'une de ses obligations décrites dans les présentes conditions générales de vente découle d'un cas de force majeure. À ce titre, la force majeure s'entend de tout événement extérieur, imprévisible et irrésistible au sens de l'article 1148 du Code civil.
+            La responsabilité du prestataire ne pourra pas être mise en oeuvre si la non-exécution ou le retard dans l&apos;exécution de l&apos;une de ses obligations décrites dans les présentes conditions générales de vente découle d&apos;un cas de force majeure. À ce titre, la force majeure s&apos;entend de tout événement extérieur, imprévisible et irrésistible au sens de l&apos;article 1148 du Code civil.
           </Text>
         </View>
 
         <View style={styles.cgvSection}>
           <Text style={styles.cgvSectionTitle}>ARTICLE 7 - TRIBUNAL COMPÉTENT</Text>
           <Text style={styles.cgvText}>
-            Tout litige relatif à l'interprétation et à l'exécution des présentes conditions générales de vente est soumis au droit français. À défaut de résolution amiable, le litige sera porté devant le Tribunal de Commerce du lieu du siège social du prestataire.
+            Tout litige relatif à l&apos;interprétation et à l&apos;exécution des présentes conditions générales de vente est soumis au droit français. À défaut de résolution amiable, le litige sera porté devant le Tribunal de Commerce du lieu du siège social du prestataire.
           </Text>
         </View>
         

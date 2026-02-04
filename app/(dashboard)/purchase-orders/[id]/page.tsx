@@ -124,6 +124,7 @@ export default async function PurchaseOrderDetailsPage(
               </tr>
             ))}
           </tbody>
+          </table>
           </div>
         </div>
 

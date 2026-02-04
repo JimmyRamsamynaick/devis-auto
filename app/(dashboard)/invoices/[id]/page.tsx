@@ -111,6 +111,7 @@ export default async function InvoiceDetailsPage(
               </tr>
             ))}
           </tbody>
+          </table>
           </div>
         </div>
 

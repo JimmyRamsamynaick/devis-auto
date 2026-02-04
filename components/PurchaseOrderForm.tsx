@@ -191,7 +191,7 @@ export default function PurchaseOrderForm({ initialData, isEditing = false }: Pu
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Valide jusqu'au</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Valide jusqu&apos;au</label>
             <input
               type="date"
               {...register('validUntil', { required: 'La date de validité est requise' })}

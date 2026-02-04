@@ -1,8 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-
-// Register font (optional, using standard fonts for now)
-// Font.register({ family: 'Roboto', src: '...' });
 
 const styles = StyleSheet.create({
   page: {

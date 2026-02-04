@@ -122,6 +122,7 @@ export default async function QuoteDetailsPage(
               </tr>
             ))}
           </tbody>
+          </table>
           </div>
         </div>
 
