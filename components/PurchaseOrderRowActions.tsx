@@ -13,7 +13,6 @@ interface PurchaseOrderRowActionsProps {
 
 export default function PurchaseOrderRowActions({ purchaseOrderId, status, clientEmail }: PurchaseOrderRowActionsProps) {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
   const [sending, setSending] = useState(false)
   const [deleting, setDeleting] = useState(false)
 

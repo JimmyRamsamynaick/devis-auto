@@ -35,8 +35,17 @@ type PurchaseOrderFormValues = {
   taxRate: number
 }
 
+type PurchaseOrderInitialData = {
+  id: string
+  clientId: string
+  validUntil: string | Date
+  items?: Array<{ id?: string; description: string; quantity: number; unitPrice: number }>
+  discount?: number
+  taxRate?: number
+}
+
 interface PurchaseOrderFormProps {
-  initialData?: any
+  initialData?: PurchaseOrderInitialData
   isEditing?: boolean
 }
 
@@ -52,7 +61,7 @@ export default function PurchaseOrderForm({ initialData, isEditing = false }: Pu
     validUntil: initialData?.validUntil 
       ? new Date(initialData.validUntil).toISOString().split('T')[0]
       : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    items: initialData?.items?.map((item: any) => ({
+    items: initialData?.items?.map((item) => ({
       id: item.id,
       description: item.description,
       quantity: item.quantity,
@@ -127,7 +136,13 @@ export default function PurchaseOrderForm({ initialData, isEditing = false }: Pu
   const onSubmit = async (data: PurchaseOrderFormValues) => {
     setSubmitting(true)
     try {
-      const url = isEditing ? `/api/purchase-orders/${initialData.id}` : '/api/purchase-orders'
+      const purchaseOrderId = initialData?.id
+      if (isEditing && !purchaseOrderId) {
+        alert('Impossible de modifier : bon de commande introuvable')
+        return
+      }
+
+      const url = isEditing ? `/api/purchase-orders/${purchaseOrderId}` : '/api/purchase-orders'
       const method = isEditing ? 'PATCH' : 'POST'
 
       const res = await fetch(url, {

@@ -73,11 +73,17 @@ export default function EditQuotePage(props: { params: Promise<{ id: string }> }
         if (servicesRes.ok) setServices(await servicesRes.json())
         
         if (quoteRes.ok) {
-          const quote = await quoteRes.json()
+          const quote = (await quoteRes.json()) as {
+            clientId: string
+            validUntil: string | Date
+            items: Array<{ description: string; quantity: number; unitPrice: number }>
+            discount: number
+            taxRate: number
+          }
           reset({
             clientId: quote.clientId,
             validUntil: new Date(quote.validUntil).toISOString().split('T')[0],
-            items: quote.items.map((item: any) => ({
+            items: quote.items.map((item) => ({
               description: item.description,
               quantity: item.quantity,
               unitPrice: item.unitPrice
